@@ -1,4 +1,5 @@
 require('dotenv').config();
+require('moment').locale('fr_FR');
 const { Client, Collection } = require('discord.js');
 const fs = require('fs');
 const config = require('./config');
@@ -16,8 +17,9 @@ fs.readdir(`${__dirname}/commands`, (error, files) => {
   files.map((file) => {
     if (!file.endsWith('.js')) return;
     const command = require(`${__dirname}/commands/${file}`);
+    const commandName = file.replace('.js', '');
 
-    client.commands.set(command.options.run, command);
+    client.commands.set(commandName, command);
   });
 });
 
@@ -31,7 +33,9 @@ client.on('message', (message) => {
 
   const command = client.commands.get(commandName.slice(config.prefix.length));
   if (!command) return;
+
   command.run(client, message, args);
+  message.delete();
 });
 
 client.login(process.env.BOT_TOKEN);
