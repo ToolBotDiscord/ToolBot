@@ -1,10 +1,10 @@
 module.exports = {
-  options: {
-    run: 'ping',
+  help: {
     name: 'Ping',
     description: ''
   },
   run: (client, message) => {
-    message.channel.send('pong');
+    const now = Date.now();
+    message.channel.send(`🏓 **Pong !** Ma latence est de ${Date.now() - now}ms.`);
   }
 };
