@@ -3,7 +3,7 @@
   "scripts": {
     "start": "node src/index.js",
     "dev": "nodemon",
-    "eslint": "eslint src/{*,**/*}.js"
+    "eslint": "npx eslint src/{*,**/*}.js"
   },
   "dependencies": {
     "discord.js": "^12.5.3",
