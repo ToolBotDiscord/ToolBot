@@ -7,4 +7,4 @@ jobs:
     steps:
       - uses: actions/checkout@master
       - name: ESLint
-        run: yarn run eslint
+        run: yarn run eslint src/{*,**/*}.js
