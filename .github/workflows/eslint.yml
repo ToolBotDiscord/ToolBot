@@ -1,0 +1,10 @@
+name: ESLint
+on: [push]
+jobs:
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - name: ESLint
+        run: yarn run eslint
