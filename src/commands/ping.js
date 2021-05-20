@@ -1,7 +1,7 @@
 module.exports = {
   help: {
     name: 'Ping',
-    description: ''
+    description: 'Latence du bot.'
   },
   run: (client, message) => {
     const now = Date.now();
