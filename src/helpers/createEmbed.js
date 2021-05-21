@@ -41,4 +41,66 @@ const createEmbed = (options) => {
   ;
 };
 
-module.exports = createEmbed;
+/**
+ * @param {string} error
+ * @returns {module:"discord.js".MessageEmbed}
+ */
+const createErrorEmbed = (error) => {
+  return createEmbed({
+    title: '❌ Erreur',
+    description: `Désolé, une erreur est survenue. ${error}`
+  });
+};
+
+/**
+ * @param {string} error
+ * @returns {module:"discord.js".MessageEmbed}
+ */
+const createJsErrorEmbed = (error) => {
+  return createEmbed({
+    title: '❌ Erreur',
+    description: `Désolé, une erreur est survenue. Voici les détails : \`\`\`js\n${error}\n\`\`\``
+  });
+};
+
+/**
+ * @param {string} [message]
+ * @returns {module:"discord.js".MessageEmbed}
+ */
+const createCanceledActionEmbed = (message) => {
+  return createEmbed({
+    title: '❌ Action annulée',
+    description: `L'action a bien été annulée. ${message}`
+  });
+};
+
+/**
+ * @param {string} message
+ * @returns {module:"discord.js".MessageEmbed}
+ */
+const createSuccessEmbed = (message) => {
+  return createEmbed({
+    title: '✅ Succès !',
+    description: message
+  });
+};
+
+/**
+ * @param {string} message
+ * @returns {module:"discord.js".MessageEmbed}
+ */
+const createWarningEmbed = (message) => {
+  return createEmbed({
+    title: '⚠ Attention !',
+    description: message
+  });
+};
+
+module.exports = {
+  createEmbed,
+  createErrorEmbed,
+  createJsErrorEmbed,
+  createSuccessEmbed,
+  createWarningEmbed,
+  createCanceledActionEmbed
+};
