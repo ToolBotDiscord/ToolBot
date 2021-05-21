@@ -1,15 +1,18 @@
 const sqlite3 = require('sqlite3').verbose();
 
-let db = new sqlite3.Database(`${__dirname}/../toolbot.db`, sqlite3.OPEN_READWRITE, (err) => {
-  if (err) console.error(err.message);
+/**
+ * @type {*|IDBDatabase}
+ */
+let db = new sqlite3.Database(`${__dirname}/../toolbot.db`, sqlite3.OPEN_READWRITE, (error) => {
+  if (error) throw error;
+
   console.log('Connexion à la base de données effectuée avec succès !');
 });
 
-// close the database connection
-// db.close((err) => {
-//   if (err) return console.error(err.message);
+// db.close((error) => {
+//   if (error) throw error;
 //
-//   console.log('Successfully closed the database connection.');
+//   console.log('Fermeture de la connexion à la base de données effectuée avec succès !');
 // });
 
 module.exports = db;
