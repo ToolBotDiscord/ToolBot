@@ -1,3 +1,4 @@
+const fs = require('fs');
 const sqlite3 = require('sqlite3').verbose();
 
 /**
@@ -16,3 +17,20 @@ let db = new sqlite3.Database(`${__dirname}/../toolbot.db`, sqlite3.OPEN_READWRI
 // });
 
 module.exports = db;
+module.exports.init = () => {
+  const fileName = `${__dirname}/../toolbot.db`;
+  const fileContent =
+    'create table config\n' +
+    '(\n' +
+    '  id INTEGER not null\n' +
+    '    constraint config_pk\n' +
+    '      primary key autoincrement,\n' +
+    '  server_id INTEGER not null,\n' +
+    '  setting TEXT not null,\n' +
+    '  value text not null\n' +
+    ');';
+
+  fs.writeFile(fileName, fileContent, (error) => {
+    if (error) throw error;
+  });
+};
