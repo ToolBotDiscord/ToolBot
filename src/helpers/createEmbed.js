@@ -57,10 +57,7 @@ const createErrorEmbed = (error) => {
  * @returns {module:"discord.js".MessageEmbed}
  */
 const createJsErrorEmbed = (error) => {
-  return createEmbed({
-    title: '❌ Erreur',
-    description: `Désolé, une erreur est survenue. Voici les détails : \`\`\`js\n${error}\n\`\`\``
-  });
+  return createErrorEmbed(`Voici les détails : \`\`\`js\n${error}\n\`\`\``);
 };
 
 /**
