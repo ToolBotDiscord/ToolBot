@@ -6,9 +6,9 @@ const config = require('./config');
 const db = require('./helpers/database');
 
 const client = new Client({
-  partials: ['GUILD_MEMBER', 'REACTION'],
+  partials: ['GUILD_MEMBER', 'REACTION', 'MESSAGE'],
   ws: {
-    intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_PRESENCES', 'GUILD_MESSAGE_REACTIONS']
+    intents: ['GUILDS', 'GUILD_MESSAGES', 'GUILD_PRESENCES', 'GUILD_MESSAGE_REACTIONS', 'GUILD_MEMBERS', 'DIRECT_MESSAGES']
   }
 });
 // L'export est utilisé pour la fonction `createEmbed` (`helpers/createEmbed.js`) pour le texte et l'URL de l'îcone du footer.
@@ -71,6 +71,7 @@ fs.readdir(`${__dirname}/commands`, (error, files) => {
 
 client.on('message', async (message) => {
   if (message.type !== 'DEFAULT' || message.author.bot) return;
+  if (!message.guild) return message.channel.send('Désolé, je ne peux pas répondre aux messages privés.');
 
   const args = message.content.trim().split(/ +/g);
   const commandName = args.shift().toLowerCase();
@@ -80,7 +81,7 @@ client.on('message', async (message) => {
   const command = client.commands.get(commandName.slice(config.prefix.length));
   if (!command) return;
 
-  const commandPerm = command.options && command.options.hasPerm;
+  const commandPerm = command.help.hasPerm;
   if (!message.member.hasPermission(commandPerm)) {
     await message.channel.send(
       // `createEmbed` n'est pas utilisé car la variable `client` (de ce fichier) est importé ce qui crée une boucle.
