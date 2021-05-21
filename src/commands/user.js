@@ -1,8 +1,10 @@
 const moment = require('moment');
-const createEmbed = require('../helpers/createEmbed');
+const { createEmbed } = require('../helpers/createEmbed');
 
 module.exports = {
   help: {
+    run: 'user',
+    syntax: '<utilisateur>',
     name: 'Infos utilisateur',
     description: 'Avoir les infos d\'un utilisateur.'
   },

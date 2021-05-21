@@ -1,5 +1,6 @@
 module.exports = {
   help: {
+    run: 'ping',
     name: 'Ping',
     description: 'Latence du bot.'
   },

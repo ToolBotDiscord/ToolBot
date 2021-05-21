@@ -3,6 +3,7 @@ const { createEmbed } = require('../helpers/createEmbed');
 
 module.exports = {
   help: {
+    run: 'server',
     name: 'Infos du serveur',
     description: 'Avoir les infos du serveur actuel.'
   },
