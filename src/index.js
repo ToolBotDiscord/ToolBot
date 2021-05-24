@@ -25,36 +25,32 @@ client.on('ready', async () => {
 });
 
 client.on('error', (error) => {
-  client.channels.cache.get('831641045996535859').send(error, { code: 'js' });
+  db.query('SELECT value FROM config WHERE setting = ?', ['logs_channel'], async (err, result) => {
+    if (err) throw err;
+
+    client.channels.cache.get(result[0].value).send(error, { code: 'js' });
+  });
 
   throw error;
 });
 
-client.on('guildMemberAdd', async (member) => {
-  //db.serialize(() => {
-  const query = db.prepare('SELECT value FROM config WHERE server_id = ? AND setting = ?');
-  query.run(member.guild.id, 'welcome_channel');
-  query.finalize();
+client.on('guildMemberAdd', (member) => {
+  db.query('SELECT value FROM config WHERE server_id = ? AND setting = ? OR setting = ? OR setting = ?', [member.guild.id, 'welcome_channel', 'welcome_role', 'welcome_message'], async (err, result) => {
+    if (err) throw err;
 
-  await member.roles.add('810180985123373106');
-  member.guild.channels.cache.get('810181184674988053').send(`bienvenue ${member}`);
-  //});
+    const welcomeMessage = result[2].value.replaceAll('$member', member).replaceAll('$server', member.guild.name);
+
+    await member.roles.add(result[1].value);
+    member.guild.channels.cache.get(result[0].value).send(welcomeMessage);
+  });
 });
 
 client.on('guildCreate', (guild) => {
-  db.serialize(() => {
-    const query = db.prepare('INSERT INTO config (server_id, setting, value) VALUES (?, ?, ?)');
-    query.run(guild.id, 'prefix', '/');
-    query.finalize();
-  });
+  db.query('INSERT INTO config (server_id, setting, value) VALUES (?, ?, ?)', [guild.id, 'prefix', 'value']);
 });
 
 client.on('guildDelete', (guild) => {
-  db.serialize(() => {
-    const query = db.prepare('DELETE FROM config WHERE server_id = ?');
-    query.run(guild.id);
-    query.finalize();
-  });
+  db.query('DELETE FROM config WHERE server_id = ?', [guild.id]);
 });
 
 fs.readdir(`${__dirname}/commands`, (error, files) => {
