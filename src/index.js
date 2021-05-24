@@ -46,7 +46,7 @@ client.on('guildMemberAdd', (member) => {
 });
 
 client.on('guildCreate', (guild) => {
-  db.query('INSERT INTO config (server_id, setting, value) VALUES (?, ?, ?)', [guild.id, 'prefix', 'value']);
+  db.query('INSERT INTO config (server_id, setting, value) VALUES (?, ?, ?)', [guild.id, 'prefix', config.prefix]);
 });
 
 client.on('guildDelete', (guild) => {
