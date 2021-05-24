@@ -23,7 +23,7 @@ module.exports = {
     ) {
       return await message.channel.send(createErrorEmbed('Ce membre ne peut pas être banni du serveur.')) && message.delete();
     }
-    if (!member.kickable) {
+    if (!member.bannable) {
       return await message.channel.send(createErrorEmbed(`Ce membre ne peut pas être banni car mon rôle est en dessous de son rôle le plus haut (${member.roles.highest}).`)) && message.delete();
     }
     if (!message.guild.member(member)) {

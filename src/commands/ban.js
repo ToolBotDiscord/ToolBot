@@ -23,14 +23,11 @@ module.exports = {
     ) {
       return await message.channel.send(createErrorEmbed('Ce membre ne peut pas être banni du serveur.')) && message.delete();
     }
-    if (!member.kickable) {
+    if (!member.bannable) {
       return await message.channel.send(createErrorEmbed(`Ce membre ne peut pas être banni car mon rôle est en dessous de son rôle le plus haut (${member.roles.highest}).`)) && message.delete();
     }
     if (!message.guild.member(member)) {
       return await message.channel.send(createErrorEmbed('Le ban est impossible car l\'utilisateur est introuvable.')) && message.delete();
-    }
-    if (!args[1]) {
-      return await message.channel.send(createErrorEmbed('Le ban est impossible car le temps n\'a pas été spécifié.')) && message.delete();
     }
 
     const reason = args.slice(2).join(' ') || 'Aucune raison fournie';
