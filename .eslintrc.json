@@ -12,6 +12,7 @@
     "indent": ["error", 2],
     "semi": ["error", "always"],
     "quotes": ["warn", "single"],
-    "no-unused-vars": 1
+    "no-unused-vars": 1,
+    "no-useless-escape": 1
   }
 }
