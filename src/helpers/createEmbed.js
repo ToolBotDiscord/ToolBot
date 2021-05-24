@@ -61,10 +61,10 @@ const createJsErrorEmbed = (error) => {
 };
 
 /**
- * @param {string} [message]
+ * @param {string} message
  * @returns {module:"discord.js".MessageEmbed}
  */
-const createCanceledActionEmbed = (message) => {
+const createCanceledActionEmbed = (message = '') => {
   return createEmbed({
     title: '❌ Action annulée',
     description: `L'action a bien été annulée. ${message}`
