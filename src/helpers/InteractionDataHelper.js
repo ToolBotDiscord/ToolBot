@@ -1,20 +1,22 @@
-const { MessageEmbed } = require('discord.js');
-
 /* eslint-disable indent */
 
 /**
- * @param {string | MessageEmbed} content
+ * @param {string | object} content
  */
 const InteractionDataHelper = (content) => {
   let returnedContent;
 
   switch (typeof content) {
-    case MessageEmbed:
+    case 'object':
       returnedContent = {
-        embeds: content
+        content: null,
+        embeds: [content]
       };
       break;
     case 'string':
+      returnedContent = { content };
+      break;
+    default:
       returnedContent = { content };
       break;
   }
