@@ -53,43 +53,37 @@ client.on('guildDelete', (guild) => {
   db.query('DELETE FROM config WHERE server_id = ?', [guild.id]);
 });
 
-fs.readdir(`${__dirname}/commands`, (error, files) => {
-  if (error) throw error;
+client.ws.on('INTERACTION_CREATE', async (interaction) => {
+  const command = interaction.data.name.toLowerCase();
+  const args = interaction.data.options;
 
-  files.map((file) => {
-    if (!file.endsWith('.js')) return;
-    const command = require(`${__dirname}/commands/${file}`);
-    const commandName = file.replace('.js', '');
+  fs.readdir(`${__dirname}/commands`, (error, files) => {
+    if (error) throw error;
 
-    client.commands.set(commandName, command);
+    files.map((file) => {
+      if (!file.endsWith('.js')) return;
+      const commandFile = require(`${__dirname}/commands/${file}`);
+      const commandName = file.replace('.js', '');
+      const commandRun = commandFile.run;
+
+      if (command === commandName) {
+        client.api.interactions(interaction.id, interaction.token).callback.post({
+          data: {
+            type: 4,
+            data: commandRun(client, interaction, args)
+          }
+        });
+      }
+
+      // if (commandFile.help.permissions) {
+      //   client.api.applications(client.user.id).guilds('809493987546759209').commands(interaction.data.id).permissions.put(
+      //     JSON.stringify({
+      //       permissions: commandFile.help.permissions
+      //     })
+      //   );
+      // }
+    });
   });
-});
-
-client.on('message', async (message) => {
-  if (message.type !== 'DEFAULT' || message.author.bot) return;
-  if (!message.guild) return message.channel.send('Désolé, je ne peux pas répondre aux messages privés.');
-
-  const args = message.content.trim().split(/ +/g);
-  const commandName = args.shift().toLowerCase();
-
-  if (!commandName.startsWith(config.prefix)) return;
-
-  const command = client.commands.get(commandName.slice(config.prefix.length));
-  if (!command) return;
-
-  const commandPerm = command.help.hasPerm;
-  if (!message.member.hasPermission(commandPerm)) {
-    await message.channel.send(
-      // `createEmbed` n'est pas utilisé car la variable `client` (de ce fichier) est importé ce qui crée une boucle.
-      new MessageEmbed()
-        .setTitle('Permissions insuffisantes')
-        .setDescription(`Vous devez avoir la permission \`${commandPerm}\` pour exécuter cette commande.`)
-        .setFooter(client.user.username, client.user.avatarURL())
-        .setTimestamp()
-    );
-  } else command.run(client, message, args);
-
-  await message.delete();
 });
 
 client.login(process.env.BOT_TOKEN);
