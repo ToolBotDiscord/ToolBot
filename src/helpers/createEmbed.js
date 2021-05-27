@@ -1,5 +1,5 @@
-const { MessageEmbed } = require('discord.js');
 const { client } = require('../index');
+const moment = require('moment');
 
 /**
  * @param {{
@@ -13,10 +13,10 @@ const { client } = require('../index');
  *   footer?: {
  *     text: string,
  *     iconURL?: string
- *   }
+ *   },
+ *   thumbnail?: string,
  *   timestamp?: Date | number
  * }} options
- * @returns {module:"discord.js".MessageEmbed}
  */
 const createEmbed = (options) => {
   const author = options.author && {
@@ -31,19 +31,25 @@ const createEmbed = (options) => {
 
   if (typeof options.title === 'undefined') throw new Error('The embed title is not defined.');
 
-  return new MessageEmbed()
-    .setAuthor(author.author || '', author.iconURL || '')
-    .setTitle(options.title)
-    .setDescription(options.description && options.description || '')
-    .addFields(fields)
-    .setFooter(footer.text || client.user.username, footer.iconURL || client.user.avatarURL())
-    .setTimestamp(options.timestamp || Date.now())
-  ;
+  return {
+    author: {
+      author: author.author || '',
+      iconURL: author.iconURL || ''
+    },
+    title: options.title,
+    description: options.description,
+    fields,
+    footer: {
+      text: footer.text || client.user.username,
+      iconURL: footer.iconURL || client.user.avatarURL()
+    },
+    thumbnail: options.thumbnail,
+    timestamp: moment(Date.now()).toISOString() || options.timestamp
+  };
 };
 
 /**
  * @param {string} error
- * @returns {module:"discord.js".MessageEmbed}
  */
 const createErrorEmbed = (error) => {
   return createEmbed({
@@ -54,7 +60,6 @@ const createErrorEmbed = (error) => {
 
 /**
  * @param {string} error
- * @returns {module:"discord.js".MessageEmbed}
  */
 const createJsErrorEmbed = (error) => {
   return createErrorEmbed(`Voici les détails : \`\`\`js\n${error}\n\`\`\``);
@@ -62,7 +67,6 @@ const createJsErrorEmbed = (error) => {
 
 /**
  * @param {string} message
- * @returns {module:"discord.js".MessageEmbed}
  */
 const createCanceledActionEmbed = (message = '') => {
   return createEmbed({
@@ -73,7 +77,6 @@ const createCanceledActionEmbed = (message = '') => {
 
 /**
  * @param {string} message
- * @returns {module:"discord.js".MessageEmbed}
  */
 const createSuccessEmbed = (message) => {
   return createEmbed({
@@ -84,7 +87,6 @@ const createSuccessEmbed = (message) => {
 
 /**
  * @param {string} message
- * @returns {module:"discord.js".MessageEmbed}
  */
 const createWarningEmbed = (message) => {
   return createEmbed({
