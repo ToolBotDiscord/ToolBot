@@ -1,7 +1,8 @@
 /* eslint-disable indent */
 
 /**
- * @param {string | object} content
+ * @param {string | Object} content
+ * @return {{ content: null, embeds: Object[] } | { content: string }}
  */
 const InteractionDataHelper = (content) => {
   let returnedContent;
