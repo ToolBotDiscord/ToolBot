@@ -14,11 +14,11 @@ module.exports = {
     let member;
     args && args.utilisateur ? member = args.utilisateur : member = interaction.member;
 
-    const message = InteractionDataHelper(`Voici ${member === interaction.member ? 'votre avatar' : `l'avatar de ${interaction.member.user.username}`} :`);
+    const message = `Voici ${member === interaction.member ? 'votre avatar' : `l'avatar de ${interaction.member.user.username}`} :`;
     // message.channel.send(msg, {
     //   files: [{ attachment: member.user.displayAvatarURL(), name: 'avatar.png' }]
     // });
 
-    return message;
+    return InteractionDataHelper(`${message} ${client.users.cache.get(interaction.member.user.id).displayAvatarURL()}`);
   }
 };
