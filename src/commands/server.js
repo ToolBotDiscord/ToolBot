@@ -1,14 +1,12 @@
 const moment = require('moment');
+const HelpCommand = require('../helpers/HelpCommandHelper');
+const InteractionDataHelper = require('../helpers/InteractionDataHelper');
 const { createEmbed } = require('../helpers/createEmbed');
 
 module.exports = {
-  help: {
-    run: 'server',
-    name: 'Infos du serveur',
-    description: 'Avoir les infos du serveur actuel.'
-  },
-  run: async (client, message) => {
-    const guild = message.guild;
+  help: HelpCommand('server', 'Infos du serveur actuel.'),
+  run: (client, interaction) => {
+    const guild = client.guilds.cache.get(interaction.guild_id);
     const members = guild.memberCount;
 
     const embed = createEmbed({
@@ -25,7 +23,7 @@ module.exports = {
         },
         {
           name: 'Fondateur',
-          value: guild.owner.user,
+          value: `<@${guild.owner.user.id}>`,
           inline: true
         },
         {
@@ -46,6 +44,6 @@ module.exports = {
       ]
     });
 
-    await message.channel.send(embed);
+    return InteractionDataHelper(embed);
   }
 };

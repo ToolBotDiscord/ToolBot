@@ -1,11 +1,11 @@
+const HelpCommand = require('../helpers/HelpCommandHelper');
+const InteractionDataHelper = require('../helpers/InteractionDataHelper');
+
 module.exports = {
-  help: {
-    run: 'ping',
-    name: 'Ping',
-    description: 'Latence du bot.'
-  },
-  run: (client, message) => {
+  help: HelpCommand('ping', 'Latence du bot'),
+  run: () => {
     const now = Date.now();
-    message.channel.send(`🏓 **Pong !** Ma latence est de ${Date.now() - now}ms.`);
+
+    return InteractionDataHelper(`🏓 **Pong !** Ma latence est de ${Date.now() - now}ms.`);
   }
 };
